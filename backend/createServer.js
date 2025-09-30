@@ -15,6 +15,10 @@ app.use("/auth", router);
 const router1 = require("./productRouter");
 app.use("/product", router1);
 
+app.get("/", (req, res) => {
+  res.send("HSHHSHS")
+});
+
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;
 
