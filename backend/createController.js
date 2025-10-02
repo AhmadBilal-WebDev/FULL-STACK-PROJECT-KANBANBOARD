@@ -1,6 +1,7 @@
 const userModel = require("./createModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const taskModel = require("./createModelTask");
 
 const signup = async (req, res) => {
   try {
@@ -15,9 +16,10 @@ const signup = async (req, res) => {
     }
     const newUserModel = new userModel({ name, email, password });
     const responce = await newUserModel.save();
-    res
-      .status(200)
-      .json({ message: "User Registration Successfully ✅", success: true });
+    res.status(200).json({
+      message: "User Registration Successfully ✅",
+      success: true,
+    });
   } catch (error) {
     res
       .status(404)
@@ -57,11 +59,12 @@ const logIn = async (req, res) => {
     );
 
     res.status(200).json({
+      userId: user._id,
       name: user.name,
       email: user.email,
       password: user.password,
       token: jwtToken,
-      message: "User LogIn Successfully!",
+      message: "Logged In Successfully!” ✅",
       success: true,
     });
   } catch (error) {
@@ -71,4 +74,35 @@ const logIn = async (req, res) => {
   }
 };
 
-module.exports = { signup, logIn };
+const addTask = async (req, res) => {
+  try {
+    const { task, date, description, userId } = req.body;
+    const newTaskModel = new taskModel({ task, date, description, userId });
+    const responce = await newTaskModel.save();
+    res.status(200).json({
+      message: "User Task Add Sucessfully!",
+      success: true,
+      data: responce,
+    });
+  } catch (error) {
+    return res
+      .status(401)
+      .json({ message: "Some Error In Save Data!", success: false });
+  }
+};
+
+const getTask = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const responce = await taskModel.find({ userId });
+    res.status(200).json({
+      message: "Successfull to get data!",
+      success: true,
+      data: responce,
+    });
+  } catch (error) {
+    res.status(400).json({ message: "Show error get data", success: false });
+  }
+};
+
+module.exports = { signup, logIn, addTask, getTask };

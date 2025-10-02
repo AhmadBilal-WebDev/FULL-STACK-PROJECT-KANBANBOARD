@@ -39,14 +39,15 @@ const LogIn = () => {
       });
       const result = await responce.json();
 
-      const { field, message, success, token, name } = result;
+      const { field, message, success, token, name, userId } = result;
       if (success) {
         handleSuccess(message);
-        localStorage.setItem("token", token);
         localStorage.setItem("name", name);
+        localStorage.setItem("token", token);
+        localStorage.setItem("userId", userId);
         setTimeout(() => {
           navigate("/dashboard");
-        }, 1000); 
+        }, 1000);
       }
       if (!success) {
         const data = { ...showLogInErrors };

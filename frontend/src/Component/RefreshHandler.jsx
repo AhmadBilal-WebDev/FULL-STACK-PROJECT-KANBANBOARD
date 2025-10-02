@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const RefreshHandler = ({ setIsAuthenticate }) => {
+const RefreshHandler = ({ data }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      setIsAuthenticate(true);
+      data(true);
       if (
         location.pathname === "/" ||
         location.pathname === "/signup" ||
@@ -16,7 +16,7 @@ const RefreshHandler = ({ setIsAuthenticate }) => {
         navigate("/dashboard");
       }
     }
-  }, [location, navigate, setIsAuthenticate]);
+  }, [location, navigate, data]);
 
   return <div></div>;
 };

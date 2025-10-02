@@ -66,7 +66,7 @@ const App = () => {
   return (
     <div>
       <BrowserRouter>
-        <RefreshHandler setIsAuthenticate={setIsAuthenticate} />
+        <RefreshHandler data={setIsAuthenticate} />
         <Routes>
           <Route path="/" element={<Intro />} />
           <Route path="/signup" element={<SignUp />} />
