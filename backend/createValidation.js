@@ -55,20 +55,32 @@ const logInValidation = (req, res, next) => {
   next();
 };
 
-const ensureAuthenticated = async (req, res, next) => {
-  const auth = req.headers["authorization"];
-  if (!auth) {
-    res.status(404).json({ message: "JWT Token Is Requires!", success: false });
+const forgotPasswordValidation = (req, res, next) => {
+  const object = Joi.object({
+    email: Joi.string().email().required().messages({
+      "string.empty": "Email is required",
+      "string.email": "Please enter a valid email address",
+    }),
+    newPassword: Joi.string().min(4).max(8).required().messages({
+      "string.empty": "Password is required",
+      "string.min": "Password must be at least 4 characters",
+      "string.max": "Password must not exceed 8 characters",
+    }),
+  });
+
+  const { error } = object.validate(req.body);
+  if (error) {
+    res.status(401).json({
+      success: false,
+      field: error.details[0].path[0],
+      message: error.details[0].message,
+    });
   }
-  try {
-    const decoded = jwt.verify(auth, process.env.JWT_SECRECT);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    res
-      .status(404)
-      .json({ error: "JWT token is required but error", success: false });
-  }
+  next();
 };
 
-module.exports = { signUpValidation, logInValidation, ensureAuthenticated };
+module.exports = {
+  signUpValidation,
+  logInValidation,
+  forgotPasswordValidation,
+};

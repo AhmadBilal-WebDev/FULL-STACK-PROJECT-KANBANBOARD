@@ -13,9 +13,9 @@ const router = require("./createRouter");
 app.use("/auth", router);
 app.use("/task", router);
 app.use("/getTask", router);
-
-const router1 = require("./productRouter");
-app.use("/product", router1);
+app.use("/deleteTask", router);
+app.use("/updateTask", router);
+app.use("/updateTaskStatus", router);
 
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;

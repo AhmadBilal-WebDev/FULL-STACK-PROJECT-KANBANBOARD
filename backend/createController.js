@@ -105,4 +105,73 @@ const getTask = async (req, res) => {
   }
 };
 
-module.exports = { signup, logIn, addTask, getTask };
+const deleteTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const responce = await taskModel.findByIdAndDelete(taskId);
+
+    if (!responce) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Task Delete Successfully!", success: true });
+  } catch (error) {
+    res.status(404).json({ message: "Something Error In Deleting Task!" });
+  }
+};
+
+const updateTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const updateData = req.body;
+    const responce = await taskModel.findOneAndUpdate(
+      { _id: taskId },
+      updateData,
+      { new: true }
+    );
+    if (!responce) {
+      res
+        .status(404)
+        .json({ message: "User Task Not Update!", success: false });
+    }
+
+    res
+      .status(200)
+      .json({ message: "User Task Update Successfully!", success: true });
+  } catch (error) {
+    res
+      .status(401)
+      .json({ message: "Internal Error In Updated", success: false });
+  }
+};
+
+const updateTaskStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const { id } = req.params;
+    const responce = await taskModel.findByIdAndUpdate(
+      { _id: id },
+      { status: status },
+      { new: true }
+    );
+    res.json({
+      success: true,
+      message: "Task status updated successfully",
+      data: responce,
+    });
+  } catch (error) {
+    res.json({ success: false, message: "Error updating task status" });
+  }
+};
+
+module.exports = {
+  signup,
+  logIn,
+  addTask,
+  getTask,
+  deleteTask,
+  updateTask,
+  updateTaskStatus,
+};
