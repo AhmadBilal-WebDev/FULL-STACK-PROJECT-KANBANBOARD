@@ -3,6 +3,7 @@ const {
   signUpValidation,
   logInValidation,
   forgotPasswordValidation,
+  authenticateVerify,
 } = require("./createValidation");
 const {
   signup,
@@ -17,8 +18,8 @@ const router = express.Router();
 
 router.post("/signup", signUpValidation, signup);
 router.post("/login", logInValidation, logIn);
-router.post("/", addTask);
-router.get("/:userId", getTask);
+router.post("/", authenticateVerify, addTask);
+router.get("/", authenticateVerify, getTask);
 router.delete("/:taskId", deleteTask);
 router.put("/:taskId", updateTask);
 router.put("/:id", updateTaskStatus);

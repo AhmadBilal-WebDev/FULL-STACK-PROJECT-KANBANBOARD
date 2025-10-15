@@ -1,5 +1,6 @@
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const signUpValidation = (req, res, next) => {
   const checkValidation = Joi.object({
@@ -79,8 +80,28 @@ const forgotPasswordValidation = (req, res, next) => {
   next();
 };
 
+const authenticateVerify = async (req, res, next) => {
+  try {
+    const token = req.headers["authorization"];
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Token not find!" });
+    }
+
+    const verifyToken = jwt.verify(token, process.env.JWT_SECRECT);
+    req.user = verifyToken;
+    next();
+  } catch (error) {
+    res
+      .status(403)
+      .json({ success: false, message: "Token Invalid or expire!" });
+  }
+};
+
 module.exports = {
   signUpValidation,
   logInValidation,
   forgotPasswordValidation,
+  authenticateVerify,
 };

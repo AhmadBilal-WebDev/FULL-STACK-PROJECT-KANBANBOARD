@@ -48,11 +48,11 @@ const DashBoard = () => {
 
   const handleSubmitTask = async () => {
     try {
-      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem("token")
       const response = await fetch("http://localhost:3000/task", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...taskMenuData, userId, status: "ToDo" }),
+        headers: { "Content-Type": "application/json", "authorization": token },
+        body: JSON.stringify({ ...taskMenuData, status: "ToDo" }),
       });
 
       const result = await response.json();
@@ -71,10 +71,10 @@ const DashBoard = () => {
 
   const fetchAllUserTask = async () => {
     try {
-      const userId = localStorage.getItem("userId");
-      const response = await fetch(`http://localhost:3000/getTask/${userId}`, {
+      const token = localStorage.getItem("token")
+      const response = await fetch("http://localhost:3000/getTask", {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "authorization": token },
       });
 
       const { success, data } = await response.json();
@@ -86,7 +86,7 @@ const DashBoard = () => {
 
   useEffect(() => {
     fetchAllUserTask();
-  }, []);
+  });
 
   const handleDeleteTsk = async (id) => {
     try {
@@ -182,7 +182,7 @@ const DashBoard = () => {
       <header className="bg-blue-500 w-full">
         <div className="flex justify-between items-center h-[5rem] px-5 sm:px-8 md:px-10 lg:px-12">
           <p className="text-white font-semibold text-[1rem] w-40 text-center sm:w-full sm:text-start sm:text-xl">
-            ​Hi <span>{localStorage.getItem("name")} </span>
+            Hi <span>{localStorage.getItem("name")} </span>
             <br className="sm:hidden" />
             Manage Your Tasks
           </p>
@@ -310,13 +310,12 @@ const DashBoard = () => {
               onDrop={(e) => handleDrop(e, status)}
             >
               <h1
-                className={`text-sm font-bold text-center p-1 md:text-lg ${
-                  status === "ToDo"
-                    ? "bg-red-200"
-                    : status === "Doing"
+                className={`text-sm font-bold text-center p-1 md:text-lg ${status === "ToDo"
+                  ? "bg-red-200"
+                  : status === "Doing"
                     ? "bg-yellow-200"
                     : "bg-green-200"
-                }`}
+                  }`}
               >
                 {status}
               </h1>

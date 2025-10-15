@@ -12,13 +12,14 @@ const taskSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  userId: {
-    type: String,
-    required: true,
-  },
   status: {
     type: String,
     default: "ToDo",
+  },
+  myId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
   },
 });
 

@@ -44,7 +44,6 @@ const LogIn = () => {
         handleSuccess(message);
         localStorage.setItem("name", name);
         localStorage.setItem("token", token);
-        localStorage.setItem("userId", userId);
         setTimeout(() => {
           navigate("/dashboard");
         }, 1000);
@@ -72,9 +71,8 @@ const LogIn = () => {
               name="email"
               value={logInData.email}
               placeholder="Email"
-              className={`border p-3 rounded-lg ${
-                showLogInErrors.email ? "border-2 border-red-500" : ""
-              }`}
+              className={`border p-3 rounded-lg ${showLogInErrors.email ? "border-2 border-red-500" : ""
+                }`}
               onChange={handleLogInData}
             />
             {showLogInErrors.email && (
@@ -87,9 +85,8 @@ const LogIn = () => {
               name="password"
               value={logInData.password}
               placeholder="Password"
-              className={`border p-3 rounded-lg ${
-                showLogInErrors.password ? "border-2 border-red-500" : ""
-              }`}
+              className={`border p-3 rounded-lg ${showLogInErrors.password ? "border-2 border-red-500" : ""
+                }`}
               onChange={handleLogInData}
             />
             {showLogInErrors.password && (

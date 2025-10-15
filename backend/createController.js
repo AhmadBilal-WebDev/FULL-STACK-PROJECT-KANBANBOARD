@@ -53,6 +53,7 @@ const logIn = async (req, res) => {
       {
         name: user.name,
         email: user.email,
+        _id: user._id,
       },
       process.env.JWT_SECRECT,
       { expiresIn: "1h" }
@@ -76,13 +77,19 @@ const logIn = async (req, res) => {
 
 const addTask = async (req, res) => {
   try {
-    const { task, date, description, userId } = req.body;
-    const newTaskModel = new taskModel({ task, date, description, userId });
+    const { task, date, description } = req.body;
+    const myId = req.user._id;
+    const newTaskModel = new taskModel({
+      task,
+      date,
+      description,
+      myId,
+    });
     const responce = await newTaskModel.save();
     res.status(200).json({
       message: "User Task Add Sucessfully!",
       success: true,
-      data: responce,
+      responce,
     });
   } catch (error) {
     return res
@@ -93,8 +100,8 @@ const addTask = async (req, res) => {
 
 const getTask = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const responce = await taskModel.find({ userId });
+    const task = req.user._id;
+    const responce = await taskModel.find({ myId: task });
     res.status(200).json({
       message: "Successfull to get data!",
       success: true,
