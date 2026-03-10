@@ -43,7 +43,7 @@ const logIn = async (req, res) => {
     const checkPassword = await bcrypt.compare(password, user.password);
     if (!checkPassword) {
       return res.status(401).json({
-        message: "Ivalid User Passwords!",
+        message: "Invalid User Passwords!",
         success: false,
         field: "password",
       });

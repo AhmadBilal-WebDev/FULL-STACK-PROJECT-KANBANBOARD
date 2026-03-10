@@ -13,6 +13,7 @@ const App = () => {
   const PrivateRouter = ({ element }) => {
     return isAuthenticate ? element : <Navigate to="/login" />;
   };
+  
   return (
     <div>
       <BrowserRouter>
