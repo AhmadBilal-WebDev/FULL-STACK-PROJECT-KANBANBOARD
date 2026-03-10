@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Header from "./Header";
 import { useNavigate } from "react-router-dom";
 import { handleSuccess } from "./Utils";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const LogIn = () => {
   const handleLogInPage = async (e) => {
     e.preventDefault();
     try {
-      const URL = "http://localhost:3000/auth/login";
+      const URL = `${apiUrl}/auth/login`;
       const responce = await fetch(URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -71,8 +72,9 @@ const LogIn = () => {
               name="email"
               value={logInData.email}
               placeholder="Email"
-              className={`border p-3 rounded-lg ${showLogInErrors.email ? "border-2 border-red-500" : ""
-                }`}
+              className={`border p-3 rounded-lg ${
+                showLogInErrors.email ? "border-2 border-red-500" : ""
+              }`}
               onChange={handleLogInData}
             />
             {showLogInErrors.email && (
@@ -85,8 +87,9 @@ const LogIn = () => {
               name="password"
               value={logInData.password}
               placeholder="Password"
-              className={`border p-3 rounded-lg ${showLogInErrors.password ? "border-2 border-red-500" : ""
-                }`}
+              className={`border p-3 rounded-lg ${
+                showLogInErrors.password ? "border-2 border-red-500" : ""
+              }`}
               onChange={handleLogInData}
             />
             {showLogInErrors.password && (

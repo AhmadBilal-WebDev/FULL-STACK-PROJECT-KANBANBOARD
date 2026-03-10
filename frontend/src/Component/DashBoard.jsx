@@ -5,6 +5,7 @@ import { IoIosAddCircle } from "react-icons/io";
 import { IoCloseSharp } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEditOutline } from "react-icons/md";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const DashBoard = () => {
   const navigate = useNavigate();
@@ -48,10 +49,10 @@ const DashBoard = () => {
 
   const handleSubmitTask = async () => {
     try {
-      const token = localStorage.getItem("token")
-      const response = await fetch("http://localhost:3000/task", {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${apiUrl}/task`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "authorization": token },
+        headers: { "Content-Type": "application/json", authorization: token },
         body: JSON.stringify({ ...taskMenuData, status: "ToDo" }),
       });
 
@@ -71,10 +72,10 @@ const DashBoard = () => {
 
   const fetchAllUserTask = async () => {
     try {
-      const token = localStorage.getItem("token")
-      const response = await fetch("http://localhost:3000/getTask", {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${apiUrl}/getTask`, {
         method: "GET",
-        headers: { "Content-Type": "application/json", "authorization": token },
+        headers: { "Content-Type": "application/json", authorization: token },
       });
 
       const { success, data } = await response.json();
@@ -90,7 +91,7 @@ const DashBoard = () => {
 
   const handleDeleteTsk = async (id) => {
     try {
-      const URL = `http://localhost:3000/deleteTask/${id}`;
+      const URL = `${apiUrl}/deleteTask/${id}`;
       const response = await fetch(URL, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -119,7 +120,7 @@ const DashBoard = () => {
 
   const handleEditSaveData = async (id) => {
     try {
-      const URL = `http://localhost:3000/updateTask/${id}`;
+      const URL = `${apiUrl}/updateTask/${id}`;
       const response = await fetch(URL, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -151,14 +152,11 @@ const DashBoard = () => {
   const handleDrop = async (event, newStatus) => {
     const id = event.dataTransfer.getData("taskId");
     try {
-      const response = await fetch(
-        `http://localhost:3000/updateTaskStatus/${id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: newStatus }),
-        }
-      );
+      const response = await fetch(`${apiUrl}/updateTaskStatus/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
 
       const { success, message } = await response.json();
       if (success) {
@@ -166,8 +164,8 @@ const DashBoard = () => {
         setStatusResult(newStatus);
         setUserTaskData((prev) =>
           prev.map((task) =>
-            task._id === id ? { ...task, status: newStatus } : ""
-          )
+            task._id === id ? { ...task, status: newStatus } : "",
+          ),
         );
       } else {
         handleError(message);
@@ -310,12 +308,13 @@ const DashBoard = () => {
               onDrop={(e) => handleDrop(e, status)}
             >
               <h1
-                className={`text-sm font-bold text-center p-1 md:text-lg ${status === "ToDo"
-                  ? "bg-red-200"
-                  : status === "Doing"
-                    ? "bg-yellow-200"
-                    : "bg-green-200"
-                  }`}
+                className={`text-sm font-bold text-center p-1 md:text-lg ${
+                  status === "ToDo"
+                    ? "bg-red-200"
+                    : status === "Doing"
+                      ? "bg-yellow-200"
+                      : "bg-green-200"
+                }`}
               >
                 {status}
               </h1>
